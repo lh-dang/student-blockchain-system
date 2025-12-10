@@ -10,125 +10,269 @@
       padding: 0;
       box-sizing: border-box;
     }
+    
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
     }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.3), transparent 50%);
+      pointer-events: none;
+    }
+    
     .container {
-      max-width: 1000px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      padding: 50px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 24px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+      padding: 60px 50px;
       text-align: center;
+      position: relative;
+      backdrop-filter: blur(10px);
     }
+    
+    .header-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    
     h1 {
-      color: #333;
-      font-size: 36px;
+      color: #1a202c;
+      font-size: 42px;
+      font-weight: 800;
       margin-bottom: 15px;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #1e3c72 0%, #7e22ce 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
+    
     .subtitle {
-      color: #666;
+      color: #4a5568;
       font-size: 18px;
       margin-bottom: 50px;
+      font-weight: 400;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
     }
+    
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 50px;
     }
+    
     .card {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 30px;
-      border-radius: 12px;
+      padding: 35px 28px;
+      border-radius: 16px;
       text-decoration: none;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: block;
+      border: 2px solid transparent;
     }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.3);
     }
+    
+    .card:hover::before {
+      opacity: 1;
+    }
+    
     .card-icon {
-      font-size: 48px;
-      margin-bottom: 15px;
+      font-size: 56px;
+      margin-bottom: 18px;
+      display: block;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
+    
     .card-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
     }
+    
     .card-desc {
-      font-size: 14px;
-      opacity: 0.9;
-      line-height: 1.6;
+      font-size: 14.5px;
+      opacity: 0.95;
+      line-height: 1.7;
+      font-weight: 400;
     }
+    
     .admin-card {
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     }
+    
     .dean-card {
       background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     }
+    
     .student-card {
       background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
     }
+    
     .verify-card {
       background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
     }
+    
     .info-section {
-      background: #f8f9fa;
-      padding: 25px;
-      border-radius: 10px;
-      margin-top: 40px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 35px;
+      border-radius: 16px;
+      margin-top: 50px;
       text-align: left;
+      border: 1px solid #dee2e6;
     }
+    
     .info-section h3 {
-      color: #667eea;
-      margin-bottom: 15px;
+      color: #1e3c72;
+      margin-bottom: 25px;
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+    
     .info-section ul {
       list-style: none;
       padding: 0;
     }
+    
     .info-section li {
-      padding: 8px 0;
-      color: #333;
+      padding: 10px 0;
+      color: #2d3748;
       line-height: 1.8;
+      font-size: 15px;
     }
+    
     .info-section li::before {
       content: "✓ ";
-      color: #28a745;
+      color: #10b981;
       font-weight: bold;
-      margin-right: 8px;
+      margin-right: 10px;
+      font-size: 18px;
     }
+    
     .contract-info {
-      margin-top: 30px;
-      padding: 20px;
-      background: #e3f2fd;
-      border-left: 4px solid #2196F3;
-      border-radius: 5px;
+      margin-top: 35px;
+      padding: 28px;
+      background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+      border-left: 5px solid #3b82f6;
+      border-radius: 12px;
       font-size: 14px;
       text-align: left;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
     }
+    
+    .contract-info h4 {
+      color: #1e40af;
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    
     .contract-info code {
-      background: #f0f0f0;
-      padding: 2px 8px;
-      border-radius: 3px;
-      font-family: monospace;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      color: #1e40af;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .footer a {
+      color: #7e22ce;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    
+    .footer a:hover {
+      color: #6b21a8;
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 40px 30px;
+      }
+      
+      h1 {
+        font-size: 32px;
+      }
+      
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .info-section > div {
+        grid-template-columns: 1fr !important;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🎓 Blockchain Student Management</h1>
-    <p class="subtitle">Hệ thống quản lý sinh viên và xác thực bằng tốt nghiệp trên Blockchain</p>
+    <div class="header-badge">🔐 Blockchain Powered</div>
+    <h1>🎓 Student Management System</h1>
+    <p class="subtitle">Hệ thống quản lý sinh viên và xác thực bằng tốt nghiệp trên Blockchain - Minh bạch, an toàn và không thể giả mạo</p>
 
     <div class="cards-grid">
       <!-- Admin Programs -->
@@ -143,7 +287,7 @@
       <!-- Admin Students -->
       <a href="admin_students.html" class="card admin-card">
         <div class="card-icon">👥</div>
-        <div class="card-title">Quản lý Sinh viên</div>
+        <div class="card-title">Quản lý Tài khoản</div>
         <div class="card-desc">
           Đăng ký sinh viên mới, cập nhật thông tin và phân bổ chương trình
         </div>
@@ -152,7 +296,7 @@
       <!-- Dean -->
       <a href="dean_students.html" class="card dean-card">
         <div class="card-icon">📝</div>
-        <div class="card-title">Nhập điểm (Trưởng khoa)</div>
+        <div class="card-title">Nhập điểm (Cán bộ quản lí điểm)</div>
         <div class="card-desc">
           Submit điểm học kỳ cho sinh viên lên blockchain
         </div>
@@ -161,7 +305,7 @@
       <!-- Student Portal -->
       <a href="student.html" class="card student-card">
         <div class="card-icon">🎓</div>
-        <div class="card-title">Tra cứu Điểm & Mint Bằng</div>
+        <div class="card-title">Tra cứu Điểm & Đăng ký xét tốt nghiệp</div>
         <div class="card-desc">
           Xem điểm, xét tốt nghiệp và mint bằng tốt nghiệp blockchain
         </div>
@@ -206,10 +350,10 @@
         </div>
       </div>
     </div>
-
-    <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e9ecef; color: #666; font-size: 14px;">
-      <p>📖 Xem hướng dẫn chi tiết: <a href="DIPLOMA_VERIFICATION_GUIDE.md" style="color: #667eea; text-decoration: none; font-weight: 600;">DIPLOMA_VERIFICATION_GUIDE.md</a></p>
-      <p style="margin-top: 10px;">© 2025 Blockchain Student Management System</p>
+    <div class="footer">
+      <p>📖 Xem hướng dẫn chi tiết: <a href="DIPLOMA_VERIFICATION_GUIDE.md">DIPLOMA_VERIFICATION_GUIDE.md</a></p>
+      <p style="margin-top: 15px; font-weight: 500;">© 2025 Blockchain Student Management System - Powered by Ethereum & Solidity</p>
+    </div>tyle="margin-top: 10px;">© 2025 Blockchain Student Management System</p>
     </div>
   </div>
 </body>
