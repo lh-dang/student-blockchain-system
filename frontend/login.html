@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Hệ thống Quản lý Sinh viên</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            max-width: 650px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .role-selection {
+            margin-bottom: 30px;
+        }
+
+        .role-selection h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .role-btn {
+            padding: 20px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 140px;
+        }
+
+        .role-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .role-btn.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .role-icon {
+            font-size: 2.5em;
+            line-height: 1;
+        }
+
+        .role-content {
+            width: 100%;
+        }
+
+        .role-btn h4 {
+            font-size: 0.95em;
+            margin-bottom: 5px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .role-btn p {
+            font-size: 0.78em;
+            opacity: 0.8;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .wallet-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .wallet-info.connected {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .wallet-info.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .wallet-address {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #333;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+
+        .connect-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .connect-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+
+        .info-message {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #bee5eb;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .network-info {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+            text-align: center;
+            border: 1px solid #ffeeba;
+        }
+
+        .success-checkmark {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #28a745;
+            color: white;
+            text-align: center;
+            line-height: 16px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 640px) {
+            .login-container {
+                padding: 30px 25px;
+                max-width: 100%;
+            }
+
+            .logo h1 {
+                font-size: 1.6em;
+            }
+
+            .role-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .role-btn {
+                padding: 18px 15px;
+                min-height: 120px;
+                flex-direction: row;
+                text-align: left;
+                gap: 12px;
+            }
+
+            .role-icon {
+                font-size: 2em;
+            }
+
+            .role-btn h4 {
+                font-size: 0.9em;
+            }
+
+            .role-btn p {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🎓 Hệ thống Quản lý</h1>
+            <p>Đăng nhập bằng MetaMask</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="network-info" id="networkInfo" style="display: none;">
+            <strong>🌐 Network:</strong> <span id="networkName">-</span> | 
+            <strong>Contract:</strong> <span style="font-family: monospace; font-size: 0.8em;">0x0e06...D9f2</span>
+        </div>
+
+        <div class="role-selection">
+            <h3>Chọn vai trò:</h3>
+            <div class="role-buttons">
+                <div class="role-btn" data-role="admin" data-page="admin_programs.html">
+                    <div class="role-icon">📚</div>
+                    <div class="role-content">
+                        <h4>Quản lý Chương trình</h4>
+                        <p>Admin</p>
+                    </div>
+                </div>
+                <div class="role-btn" data-role="admin-students" data-page="admin_students.html">
+                    <div class="role-icon">👥</div>
+                    <div class="role-content">
+                        <h4>Quản lý Sinh viên</h4>
+                        <p>Admin</p>
+                    </div>
+                </div>
+                <div class="role-btn" data-role="dean" data-page="dean_students.html">
+                    <div class="role-icon">📝</div>
+                    <div class="role-content">
+                        <h4>Quản lý Điểm</h4>
+                        <p>Trưởng Khoa</p>
+                    </div>
+                </div>
+                <div class="role-btn" data-role="student" data-page="student.html">
+                    <div class="role-icon">🎓</div>
+                    <div class="role-content">
+                        <h4>Tra cứu Điểm</h4>
+                        <p>Sinh viên</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wallet-info" id="walletInfo">
+            <p><strong>Chưa kết nối ví</strong></p>
+            <p style="font-size: 0.85em; margin-top: 5px;">Vui lòng kết nối MetaMask</p>
+        </div>
+
+        <button class="connect-btn" id="connectBtn">
+            🦊 Kết nối MetaMask
+        </button>
+
+        <button class="login-btn" id="loginBtn" disabled>
+            🔐 Đăng nhập
+        </button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Đang xác thực quyền truy cập...</p>
+        </div>
+
+        <div class="info-message">
+            💡 Bạn cần cài đặt MetaMask và có quyền truy cập tương ứng
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Quay về trang chủ</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script>
+        let web3;
+        let account;
+        let selectedRole = null;
+        let selectedPage = null;
+        let contract;
+
+        const CONTRACT_ADDRESS = "0x0e068999591e59D0eAbff3491E2CD449B2B7D9f2";
+        const CONTRACT_ABI = [
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "name": "isDean",
+                "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "name": "walletToStudentId",
+                "outputs": [{"internalType": "string", "name": "", "type": "string"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "name": "deans",
+                "outputs": [
+                    {"internalType": "address", "name": "deanAddress", "type": "address"},
+                    {"internalType": "string", "name": "name", "type": "string"},
+                    {"internalType": "string", "name": "department", "type": "string"},
+                    {"internalType": "string", "name": "email", "type": "string"},
+                    {"internalType": "string", "name": "phone", "type": "string"},
+                    {"internalType": "string", "name": "notes", "type": "string"},
+                    {"internalType": "uint256", "name": "addedAt", "type": "uint256"},
+                    {"internalType": "address", "name": "addedBy", "type": "address"},
+                    {"internalType": "bool", "name": "isActive", "type": "bool"},
+                    {"internalType": "bool", "name": "exists", "type": "bool"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        // Role selection
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedRole = this.dataset.role;
+                selectedPage = this.dataset.page;
+                
+                if (account) {
+                    document.getElementById('loginBtn').disabled = false;
+                }
+            });
+        });
+
+        // Connect wallet
+        document.getElementById('connectBtn').addEventListener('click', async () => {
+            await connectWallet();
+        });
+
+        // Login
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            await login();
+        });
+
+        async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                showError('Vui lòng cài đặt MetaMask!');
+                return;
+            }
+
+            try {
+                web3 = new Web3(window.ethereum);
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                account = accounts[0];
+
+                // Verify contract is deployed
+                const code = await web3.eth.getCode(CONTRACT_ADDRESS);
+                if (code === '0x' || code === '0x0') {
+                    showError('Contract chưa được deploy tại địa chỉ này!');
+                    return;
+                }
+
+                // Load contract
+                contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+
+                // Verify we can call contract
+                await contract.methods.owner().call();
+
+                // Get network info
+                const networkId = await web3.eth.net.getId();
+                const networkName = getNetworkName(networkId);
+                document.getElementById('networkName').textContent = networkName;
+                document.getElementById('networkInfo').style.display = 'block';
+
+                updateWalletUI(true);
+                
+                if (selectedRole) {
+                    document.getElementById('loginBtn').disabled = false;
+                }
+
+                // Listen for account changes
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    if (accounts.length === 0) {
+                        updateWalletUI(false);
+                        document.getElementById('loginBtn').disabled = true;
+                        account = null;
+                    } else {
+                        account = accounts[0];
+                        updateWalletUI(true);
+                        if (selectedRole) {
+                            document.getElementById('loginBtn').disabled = false;
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error('Connect error:', error);
+                if (error.message.includes('invalid address')) {
+                    showError('Lỗi: Địa chỉ contract không hợp lệ!');
+                } else if (error.message.includes('User rejected')) {
+                    showError('Bạn đã từ chối kết nối MetaMask');
+                } else {
+                    showError('Không thể kết nối: ' + error.message);
+                }
+            }
+        }
+
+        async function login() {
+            if (!account || !selectedRole) {
+                showError('Vui lòng chọn vai trò và kết nối ví!');
+                return;
+            }
+
+            if (!contract) {
+                showError('Contract chưa được khởi tạo. Vui lòng kết nối lại ví!');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loginBtn').disabled = true;
+
+            try {
+                let hasPermission = false;
+                let userName = '';
+
+                if (selectedRole === 'admin' || selectedRole === 'admin-students') {
+                    // Check if user is owner
+                    const owner = await contract.methods.owner().call();
+                    hasPermission = account.toLowerCase() === owner.toLowerCase();
+                    userName = 'Admin';
+                    
+                    if (!hasPermission) {
+                        showError('Bạn không phải là Owner của contract!');
+                    }
+                } else if (selectedRole === 'student') {
+                    // Student - kiểm tra ví có trong hệ thống không
+                    const studentId = await contract.methods.walletToStudentId(account).call();
+                    if (studentId && studentId.trim() !== '') {
+                        // Lấy thông tin sinh viên để có tên thật
+                        try {
+                            const studentInfo = await contract.methods.getStudentInfo(studentId).call();
+                            if (studentInfo.exists) {
+                                hasPermission = true;
+                                userName = studentInfo.name;
+                                // Lưu MSSV riêng để sử dụng sau
+                                sessionStorage.setItem('studentId', studentId);
+                            } else {
+                                hasPermission = false;
+                                showError('Không tìm thấy thông tin sinh viên!');
+                            }
+                        } catch (error) {
+                            console.error('Lỗi lấy thông tin sinh viên:', error);
+                            hasPermission = true;
+                            userName = 'Sinh viên (' + studentId + ')';
+                            sessionStorage.setItem('studentId', studentId);
+                        }
+                    } else {
+                        hasPermission = false;
+                        showError('Địa chỉ ví của bạn chưa được đăng ký trong hệ thống!');
+                    }
+                } else if (selectedRole === 'dean') {
+                    // Check if user is dean
+                    const isDeanResult = await contract.methods.isDean(account).call();
+                    hasPermission = isDeanResult;
+                    
+                    if (hasPermission) {
+                        const deanInfo = await contract.methods.deans(account).call();
+                        if (deanInfo.isActive) {
+                            userName = deanInfo.name || 'Trưởng Khoa';
+                        } else {
+                            hasPermission = false;
+                            showError('Tài khoản Dean của bạn đã bị vô hiệu hóa!');
+                        }
+                    } else {
+                        showError('Bạn không có trong danh sách Dean!');
+                    }
+                }
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (hasPermission) {
+                    // Save login session
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userRole', selectedRole);
+                    sessionStorage.setItem('userAddress', account);
+                    sessionStorage.setItem('userName', userName);
+                    sessionStorage.setItem('loginTime', new Date().getTime());
+
+                    // Redirect to target page
+                    window.location.href = selectedPage;
+                } else {
+                    document.getElementById('loginBtn').disabled = false;
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loginBtn').disabled = false;
+                
+                if (error.message.includes('Invalid JSON RPC response')) {
+                    showError('Lỗi kết nối với blockchain. Vui lòng kiểm tra mạng!');
+                } else if (error.message.includes('execution reverted')) {
+                    showError('Contract từ chối thực thi. Vui lòng kiểm tra quyền!');
+                } else {
+                    showError('Lỗi xác thực: ' + error.message);
+                }
+            }
+        }
+
+        function updateWalletUI(connected) {
+            const walletInfo = document.getElementById('walletInfo');
+            const connectBtn = document.getElementById('connectBtn');
+
+            if (connected) {
+                walletInfo.className = 'wallet-info connected';
+                walletInfo.innerHTML = `
+                    <p><strong>✅ Đã kết nối ví</strong></p>
+                    <div class="wallet-address">${account}</div>
+                `;
+                connectBtn.textContent = '✓ Đã kết nối';
+                connectBtn.disabled = true;
+            } else {
+                walletInfo.className = 'wallet-info';
+                walletInfo.innerHTML = `
+                    <p><strong>Chưa kết nối ví</strong></p>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Vui lòng kết nối MetaMask</p>
+                `;
+                connectBtn.textContent = '🦊 Kết nối MetaMask';
+                connectBtn.disabled = false;
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function getNetworkName(networkId) {
+            const networks = {
+                1: 'Ethereum Mainnet',
+                3: 'Ropsten Testnet',
+                4: 'Rinkeby Testnet',
+                5: 'Goerli Testnet',
+                42: 'Kovan Testnet',
+                1337: 'Ganache/Local',
+                5777: 'Ganache',
+                11155111: 'Sepolia Testnet'
+            };
+            return networks[networkId] || `Network ID: ${networkId}`;
+        }
+
+        // Check if MetaMask is installed
+        window.addEventListener('load', async () => {
+            if (typeof window.ethereum === 'undefined') {
+                const infoMsg = document.querySelector('.info-message');
+                infoMsg.style.background = '#f8d7da';
+                infoMsg.style.color = '#721c24';
+                infoMsg.style.border = '1px solid #f5c6cb';
+                infoMsg.textContent = '⚠️ Vui lòng cài đặt MetaMask để đăng nhập!';
+            }
+        });
+    </script>
+</body>
+</html>

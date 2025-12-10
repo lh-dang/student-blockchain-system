@@ -8,13 +8,13 @@ let contract;
 let currentAccount;
 let currentProgramData = null; // Data đang được parse từ JSON/CSV
 
-// ============ KẾT NỐI METAMASK ============
+// ============ KHỞI TẠO ============
 
-async function connectWallet() {
+async function initializeWeb3() {
   try {
     if (typeof window.ethereum === 'undefined') {
       showStatus('Vui lòng cài đặt MetaMask!', 'error');
-      return;
+      return false;
     }
 
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
@@ -23,85 +23,40 @@ async function connectWallet() {
     web3 = new Web3(window.ethereum);
     contract = new web3.eth.Contract(contractABI, contractAddress);
 
-    // Kiểm tra xem contract có deployed không
-    try {
-      const code = await web3.eth.getCode(contractAddress);
-      if (code === '0x' || code === '0x0') {
-        showStatus('❌ Contract chưa được deployed tại địa chỉ này!', 'error');
-        updateWalletUI(true);
-        return;
-      }
-    } catch (err) {
-      showStatus('❌ Không thể kết nối đến blockchain. Kiểm tra Ganache đã chạy chưa!', 'error');
-      return;
+    // Kiểm tra contract deployed
+    const code = await web3.eth.getCode(contractAddress);
+    if (code === '0x' || code === '0x0') {
+      showStatus('❌ Contract chưa được deployed!', 'error');
+      return false;
     }
 
-    // Kiểm tra xem account có phải là Owner không (optional, có thể bỏ qua nếu lỗi)
-    try {
-      const owner = await contract.methods.owner().call();
-      
-      if (currentAccount.toLowerCase() !== owner.toLowerCase()) {
-        showStatus('⚠️ Cảnh báo: Bạn không phải là Owner! Chỉ Owner mới có thể tạo/sửa chương trình đào tạo.', 'error');
-        // Vẫn cho xem nhưng cảnh báo
-      } else {
-        showStatus('✅ Kết nối thành công! Bạn là Owner.', 'success');
-      }
-    } catch (ownerErr) {
-      console.warn('Không thể kiểm tra owner:', ownerErr);
-      showStatus('✅ Kết nối thành công! (Không kiểm tra được quyền Owner)', 'success');
-    }
-    
-    updateWalletUI(true);
-    await loadPrograms();
-
-    // Lắng nghe sự kiện thay đổi account
-    ethereum.on('accountsChanged', async (accounts) => {
-      if (accounts.length === 0) {
-        updateWalletUI(false);
-      } else {
-        currentAccount = accounts[0];
-        updateWalletUI(true);
-        
-        // Kiểm tra lại owner (optional)
-        try {
-          const owner = await contract.methods.owner().call();
-          if (currentAccount.toLowerCase() !== owner.toLowerCase()) {
-            showStatus('⚠️ Cảnh báo: Bạn không phải là Owner!', 'error');
-          }
-        } catch (e) {
-          // Ignore
-        }
-      }
-    });
-
+    return true;
   } catch (error) {
-    console.error('Lỗi kết nối:', error);
-    showStatus('❌ Lỗi kết nối: ' + error.message, 'error');
+    console.error('Lỗi khởi tạo:', error);
+    showStatus('❌ Lỗi khởi tạo: ' + error.message, 'error');
+    return false;
   }
 }
 
+// Tự động khởi tạo khi trang load
+window.addEventListener('DOMContentLoaded', async () => {
+  const initialized = await initializeWeb3();
+  if (initialized) {
+    await loadPrograms();
+    
+    // Lắng nghe thay đổi account
+    ethereum.on('accountsChanged', async (accounts) => {
+      if (accounts.length > 0) {
+        currentAccount = accounts[0];
+        await loadPrograms();
+      }
+    });
+  }
+});
+
 function updateWalletUI(connected) {
-  const statusDiv = document.getElementById('walletStatus');
-  const connectionStatus = document.getElementById('connectionStatus');
-  const accountInfo = document.getElementById('accountInfo');
-  const contractAddressSpan = document.getElementById('contractAddress');
-  
-  // Luôn hiển thị contract address
-  if (contractAddressSpan) {
-    contractAddressSpan.textContent = contractAddress;
-  }
-  
-  if (connected) {
-    statusDiv.className = 'wallet-status connected';
-    connectionStatus.innerHTML = '🟢 Đã kết nối';
-    accountInfo.style.display = 'block';
-    accountInfo.innerHTML = `<strong>Tài khoản:</strong> ${currentAccount.substring(0, 10)}...${currentAccount.substring(38)}`;
-  } else {
-    statusDiv.className = 'wallet-status disconnected';
-    connectionStatus.innerHTML = '🔴 Chưa kết nối';
-    accountInfo.style.display = 'none';
-    accountInfo.innerHTML = '';
-  }
+  // Function giữ lại để tránh lỗi nếu có code gọi đến
+  // Không cần cập nhật UI nữa
 }
 
 // ============ XỬ LÝ FILE JSON ============

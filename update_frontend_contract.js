@@ -31,7 +31,8 @@ const filesToUpdate = [
   'frontend/dean_students.js',
   'frontend/student.html',
   'frontend/student.js',
-  'frontend/verify_diploma.js'
+  'frontend/verify_diploma.js',
+  'frontend/login.html'
 ];
 
 let updated = 0;
@@ -50,6 +51,11 @@ filesToUpdate.forEach(filePath => {
   content = content.replace(
     /const contractAddress = ["']0x[a-fA-F0-9]{40}["'];/g,
     `const contractAddress = "${contractAddress}";`
+  );
+  
+  content = content.replace(
+    /const CONTRACT_ADDRESS = ["']0x[a-fA-F0-9]{40}["'];/g,
+    `const CONTRACT_ADDRESS = "${contractAddress}";`
   );
   
   content = content.replace(

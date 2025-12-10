@@ -88,11 +88,11 @@ function switchTab(tabName) {
   }
 }
 
-// Connect MetaMask
-async function connectMetaMask() {
+// Khởi tạo Web3
+async function initializeWeb3() {
   if (!window.ethereum) {
     alert('❌ Không tìm thấy MetaMask!');
-    return;
+    return false;
   }
 
   try {
@@ -101,26 +101,26 @@ async function connectMetaMask() {
     web3 = new Web3(window.ethereum);
     contract = new web3.eth.Contract(contractABI, contractAddress);
 
-    const networkId = await web3.eth.net.getId();
-    const chainId = await web3.eth.getChainId();
-    const owner = await contract.methods.owner().call();
-    const isOwner = owner.toLowerCase() === currentAccount.toLowerCase();
+    // Listen for account changes
+    window.ethereum.on('accountsChanged', function (accounts) {
+      if (accounts.length > 0) {
+        currentAccount = accounts[0];
+        location.reload();
+      }
+    });
 
-    document.getElementById("accountInfo").innerHTML = `
-      <strong>✅ Đã kết nối:</strong> ${currentAccount}<br>
-      <strong>Network ID:</strong> ${networkId} | <strong>Chain ID:</strong> ${chainId}<br>
-      <strong>Contract Owner:</strong> ${owner}<br>
-      <strong>Bạn là Owner:</strong> ${isOwner ? '✅ Có' : '❌ KHÔNG'}
-    `;
-
-    if (!isOwner) {
-      alert('⚠️ Cảnh báo: Bạn không phải Owner! Chỉ owner mới có thể đăng ký sinh viên.');
-    }
+    return true;
   } catch (err) {
     console.error(err);
     alert('❌ Lỗi kết nối: ' + err.message);
+    return false;
   }
 }
+
+// Tự động khởi tạo khi trang load
+window.addEventListener('DOMContentLoaded', async () => {
+  await initializeWeb3();
+});
 
 // Đăng ký từng sinh viên
 async function registerSingleStudent() {

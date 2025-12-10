@@ -39,22 +39,6 @@
             font-size: 0.9em;
         }
 
-        .wallet-status {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
-        }
-
-        .wallet-status.connected {
-            border-left-color: #28a745;
-        }
-
-        .wallet-status.disconnected {
-            border-left-color: #dc3545;
-        }
-
         .section {
             margin-bottom: 30px;
             padding: 20px;
@@ -303,21 +287,8 @@
         <h1>🎓 Quản lý Chương trình Đào tạo</h1>
         <p class="subtitle">Hệ thống blockchain - Admin Panel</p>
 
-        <!-- Wallet Status -->
-        <div class="wallet-status disconnected" id="walletStatus">
-            <div><strong>🔌 Trạng thái:</strong> <span id="connectionStatus">Chưa kết nối</span></div>
-            <div id="accountInfo" style="margin-top: 5px; display: none;">
-                <strong>👤 Tài khoản:</strong> <span id="accountAddress"></span>
-            </div>
-            <div id="contractInfo" style="margin-top: 5px;">
-                <strong>📜 Contract:</strong> <span id="contractAddress"></span>
-            </div>
-        </div>
-
         <div style="margin-bottom: 20px;">
-            <button onclick="connectWallet()" id="connectBtn">🦊 Kết nối MetaMask</button>
             <button onclick="loadPrograms()" class="btn-secondary">🔄 Tải lại danh sách</button>
-            <!-- <button onclick="debugProgramClasses()" class="btn-secondary">🐛 Debug Classes</button> -->
         </div>
 
         <!-- Section 1: Tạo chương trình đào tạo từ form - ẨN ĐI -->
@@ -428,6 +399,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.4/dist/web3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="auth.js"></script>
     <script src="admin_programs.js"></script>
 </body>
 </html>

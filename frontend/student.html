@@ -235,46 +235,8 @@
     <h1>🎓 Student Portal - Xem điểm Blockchain</h1>
     <p class="subtitle">Tra cứu điểm học tập và quá trình học tập từ Blockchain</p>
 
-    <!-- WALLET CONNECTION -->
-    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-      <strong>🔐 XÁC THỰC BẮT BUỘC:</strong> Bạn phải kết nối ví MetaMask để xem điểm.<br>
-      Chỉ chủ sở hữu ví đã đăng ký mới có thể xem điểm của MSSV đó.
-    </div>
-
-    <div style="margin-bottom: 20px;">
-      <button id="connectWalletBtn" onclick="connectMetaMask()" style="background: linear-gradient(135deg, #f6921e 0%, #f47920 100%); font-size: 16px; padding: 15px 30px;">
-        🦊 Kết nối MetaMask
-      </button>
-      <div id="walletInfo" style="display: none; margin-top: 15px; padding: 15px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 5px;"></div>
-    </div>
-
-    <!-- HEADER SECTION - NHẬP MSSV -->
-    <div class="header-section" id="loginSection" style="display: none;">
-      <h3 style="color: #667eea; margin-bottom: 15px;">🔍 Tra cứu điểm</h3>
-      
-      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 250px;">
-          <label style="display: block; font-weight: 600; margin-bottom: 5px; color: #333;">
-            Mã số sinh viên (MSSV):
-          </label>
-          <input 
-            type="text" 
-            id="inputMSSV" 
-            placeholder="Nhập MSSV (VD: B2203716)" 
-            style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 5px; font-size: 14px;"
-            value="B2203716"
-          />
-        </div>
-        <button id="btnSearch" class="success" style="margin-top: 22px;">
-          🔍 Tra cứu
-        </button>
-      </div>
-      
-      <div id="accountInfo" style="margin-top: 15px; font-size: 14px; color: #666;">
-        <em>💡 Nhập MSSV của bạn để xem kết quả học tập</em>
-      </div>
-      <div id="status"></div>
-    </div>
+    <!-- STATUS MESSAGE -->
+    <div id="status" style="margin-bottom: 15px;"></div>
 
     <!-- THÔNG TIN SINH VIÊN -->
     <div id="studentInfoSection" style="display: none;" class="info-box">
@@ -400,6 +362,7 @@
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.4/dist/web3.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="auth.js"></script>
   <script src="student.js?t=1763296049"></script>
 </body>
 </html>
