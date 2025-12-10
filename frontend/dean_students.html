@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản Lý Nhập Điểm - Blockchain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 30px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 10px 5px 10px 0;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+    button.success {
+      background: #28a745;
+    }
+    button.success:hover {
+      background: #218838;
+    }
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .success-box {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .error-box {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      margin: 20px 0;
+    }
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+    .file-input-label {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .file-input-label:hover {
+      background: #5568d3;
+    }
+    .file-name {
+      display: inline-block;
+      margin-left: 10px;
+      color: #666;
+      font-size: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    .preview-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin: 20px 0;
+    }
+    textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .step {
+      margin: 30px 0;
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+    .step h2 {
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+    code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .filter-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #667eea;
+      font-size: 18px;
+    }
+    .loading::after {
+      content: '...';
+      animation: dots 1.5s infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .grade-A { background: #d4edda; color: #155724; }
+    .grade-B { background: #d1ecf1; color: #0c5460; }
+    .grade-C { background: #fff3cd; color: #856404; }
+    .grade-D { background: #f8d7da; color: #721c24; }
+    .grade-F { background: #f5c6cb; color: #721c24; }
+    
+    /* View Grades Tab Styles */
+    .view-container {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+    .filter-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .filter-group label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 14px;
+    }
+    .filter-group input,
+    .filter-group select {
+      padding: 10px 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin: 25px 0;
+    }
+    .stat-box {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .stat-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    .stat-box .icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .stat-box .value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #667eea;
+      margin: 10px 0;
+    }
+    .stat-box .label {
+      font-size: 13px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .data-table-container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .data-table thead th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .data-table thead th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+    .data-table thead th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+    .data-table tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 13px;
+    }
+    .data-table tbody tr:hover {
+      background: #f0f4ff;
+    }
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+    .empty-state .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    .empty-state h3 {
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-primary { background: #e3f2fd; color: #1976d2; }
+    .badge-success { background: #e8f5e9; color: #388e3c; }
+    .badge-warning { background: #fff3e0; color: #f57c00; }
+    .badge-danger { background: #ffebee; color: #d32f2f; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Quản Lý Nhập Điểm</h1>
+    <p class="subtitle">Hệ thống quản lý nhập điểm và xem thông tin sinh viên trên Blockchain</p>
+
+    <!-- NAVIGATION TABS -->
+    <div style="margin: 20px 0; border-bottom: 2px solid #667eea;">
+      <button onclick="showTab('upload')" id="tabUpload" style="border-radius: 5px 5px 0 0; border-bottom: none; background: #667eea;">
+        📤 Nhập điểm
+      </button>
+      <button onclick="showTab('view')" id="tabView" style="border-radius: 5px 5px 0 0; border-bottom: none; background: #ddd; color: #333;">
+        👀 Xem điểm đã nhập
+      </button>
+      <button onclick="showTab('applications')" id="tabApplications" style="border-radius: 5px 5px 0 0; border-bottom: none; background: #ddd; color: #333;">
+        📋 Danh sách xét tốt nghiệp
+      </button>
+      <button onclick="showTab('graduate')" id="tabGraduate" style="border-radius: 5px 5px 0 0; border-bottom: none; background: #ddd; color: #333;">
+        🎓 Sinh viên tốt nghiệp
+      </button>
+    </div>
+
+    <!-- TAB: UPLOAD ĐIỂM -->
+    <div id="uploadTab">
+    <!-- KẾT NỐI METAMASK -->
+    <div id="walletSection" class="info-box">
+      <strong>🦊 Kết nối MetaMask (Quản lý nhập điểm):</strong><br>
+      <div style="margin-top: 10px;">
+        <button onclick="connectWallet()" id="connectBtn">� Kết nối MetaMask</button>
+        <div id="walletInfo" style="margin-top: 10px; display: none;">
+          <strong>✅ Đã kết nối:</strong><br>
+          Account: <code id="accountAddress"></code><br>
+          Role: <span id="accountRole"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="info-box">
+      <strong>📝 Hướng dẫn:</strong><br>
+      1. Kết nối MetaMask (Account 1 - Dean)<br>
+      2. Upload file Excel (.xlsx, .xls) hoặc CSV (.csv) - CHỈ CHỨA ĐIỂM<br>
+      3. Hệ thống tự động chuyển đổi sang JSON<br>
+      4. Kiểm tra và chỉnh sửa nếu cần<br>
+      5. Submit lên blockchain<br><br>
+      
+      <strong style="color: #28a745;">🚀 TÍNH NĂNG MỚI - BATCH SUBMIT:</strong><br>
+      <div style="background: #d4edda; padding: 10px; border-radius: 5px; margin: 10px 0;">
+        ✅ <strong>Gộp tất cả sinh viên vào MỘT hoặc NHIỀU transaction</strong><br>
+        ✅ <strong>TỰ ĐỘNG chia nhỏ</strong> nếu dữ liệu quá lớn<br>
+        ✅ <strong>Chỉ cần ký 1-3 lần</strong> thay vì hàng trăm lần<br>
+        ✅ <strong>Nhanh hơn 10-100 lần</strong> so với cách cũ<br>
+        ✅ <strong>Tiết kiệm gas</strong> và thời gian<br>
+        ✅ <strong>Thông minh</strong> - Tự động tối ưu số lượng mỗi batch
+      </div>
+      
+      <strong style="color: #2196F3;">💼 VỀ ĐỊA CHỈ VÍ:</strong><br>
+      <span style="color: #333;">
+        • Địa chỉ ví được GÁN KHI ĐĂNG KÝ SINH VIÊN qua <strong>admin_students.html</strong><br>
+        • File Excel upload điểm KHÔNG CẦN cột địa chỉ ví<br>
+        • Sinh viên phải được đăng ký trước khi upload điểm<br>
+        • Xem địa chỉ ví: Tab "👀 Xem điểm đã upload" → Chọn lớp
+      </span><br><br>
+      
+      <strong style="color: #d9534f;">⚠️ LƯU Ý QUAN TRỌNG:</strong><br>
+      <span style="color: #d9534f; font-weight: bold;">
+        • KHÔNG CHO PHÉP sửa đổi/cập nhật điểm đã submit<br>
+        • Chỉ có thể tạo HỌC KỲ MỚI<br>
+        • Nếu học kỳ đã tồn tại, hệ thống sẽ TỪ CHỐI submit<br>
+        • Vui lòng kiểm tra kỹ trước khi submit!
+      </span>
+    </div> -->
+
+    <!-- BƯỚC 1: UPLOAD FILE -->
+    <div class="step">
+      <h2>Bước 1: Upload file Excel/CSV</h2>
+      
+      <div class="info-box" style="font-size: 12px;">
+        <strong>📋 Cấu trúc file mẫu (Excel/CSV) - CHỈ CHỨA ĐIỂM:</strong>
+        <table style="margin-top: 10px; font-size: 11px;">
+          <tr>
+            <th>F_MAMH</th>
+            <th>F_TENMHVN</th>
+            <th>F_DVHT</th>
+            <th>F_MASV</th>
+            <th>F_TENSV</th>
+            <th>F_TENLOP</th>
+            <th>F_DIEM2</th>
+            <th>NHHK</th>
+          </tr>
+          <tr>
+            <td>FL103H</td>
+            <td>Ngữ âm thực hành 1</td>
+            <td>2</td>
+            <td>B2014161</td>
+            <td>Lê Văn A</td>
+            <td>FL20V1F1</td>
+            <td>9.2</td>
+            <td>20211</td>
+          </tr>
+        </table>
+        <p style="margin-top: 10px;">
+          <strong>Lưu ý:</strong><br>
+          • Dòng đầu tiên phải là header (tên cột)<br>
+          • <strong style="color: #2196F3;">KHÔNG CẦN cột địa chỉ ví</strong> - địa chỉ ví được gán khi đăng ký sinh viên qua <code>admin_students.html</code><br>
+          • File này chỉ để upload ĐIỂM cho sinh viên ĐÃ được đăng ký
+        </p>
+      </div>
+
+      <div class="file-input-wrapper">
+        <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(event)" />
+        <label for="excelFile" class="file-input-label">📁 Chọn file Excel/CSV</label>
+        <span class="file-name" id="fileName">Chưa chọn file</span>
+      </div>
+
+      <div id="uploadStatus"></div>
+    </div>
+
+    <!-- BƯỚC 2: XEM TRƯỚC DỮ LIỆU -->
+    <div class="step" id="previewSection" style="display: none;">
+      <h2>Bước 2: Xem trước dữ liệu</h2>
+      
+      <div id="previewStats"></div>
+      
+      <div class="preview-container">
+        <table id="previewTable">
+          <thead id="previewHeader"></thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+
+      <button onclick="convertToJSON()">🔄 Chuyển sang JSON</button>
+    </div>
+
+    <!-- BƯỚC 3: CHỈNH SỬA JSON -->
+    <div class="step" id="jsonSection" style="display: none;">
+      <h2>Bước 3: Chỉnh sửa JSON (nếu cần)</h2>
+      
+      <!-- <div class="warning-box">
+        <strong>⚠️ Lưu ý quan trọng:</strong><br>
+        • Kiểm tra lại MSSV, tên sinh viên, học kỳ<br>
+        • Đảm bảo điểm số chính xác<br>
+        • Sinh viên phải đã được đăng ký trước (qua admin_students.html)<br>
+        • Mỗi học kỳ của một sinh viên = 1 transaction blockchain
+      </div> -->
+
+      <label style="display: block; font-weight: 600; margin: 20px 0 10px 0;">
+        JSON đầy đủ (tất cả sinh viên):
+        <button onclick="toggleJSON()" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">👁️ Hiện/Ẩn</button>
+      </label>
+      <textarea id="jsonOutput" style="display: none;"></textarea>
+
+      <button onclick="downloadAllJSON()">💾 Tải xuống TẤT CẢ file JSON (.zip)</button>
+      <button onclick="downloadSingleJSON()">� Tải xuống từng file riêng</button>
+      <button class="success" onclick="submitToBlockchain()">✅ Submit lên Blockchain (từng sinh viên)</button>
+
+      <div id="submitResult"></div>
+    </div>
+    </div> <!-- End uploadTab -->
+
+    <!-- TAB: XEM ĐIỂM -->
+    <div id="viewTab" style="display: none;">
+      <div class="view-container">
+        <!-- BỘ LỌC -->
+        <div class="filter-card">
+          <h3 style="margin-bottom: 20px; color: #333;">🔍 Bộ lọc tìm kiếm</h3>
+          
+          <div class="filter-row">
+            <div class="filter-group">
+              <label>📚 Lớp học</label>
+              <select id="classFilter" onchange="loadClassData()">
+                <option value="">-- Chọn lớp --</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>📅 Năm học</label>
+              <select id="yearFilter" onchange="filterData()">
+                <option value="">Tất cả năm học</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>🔎 MSSV / Tên sinh viên</label>
+              <input type="text" id="studentFilter" placeholder="Nhập MSSV hoặc tên..." onkeyup="filterData()" />
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button onclick="resetFilters()" style="background: #6c757d;">🔄 Đặt lại bộ lọc</button>
+            <button class="success" onclick="exportToExcel()">📥 Xuất Excel</button>
+          </div>
+        </div>
+
+        <!-- THỐNG KÊ -->
+        <div id="statsSection" style="display: none;">
+          <h3 style="margin-bottom: 15px; color: #333;">📊 Thống kê tổng quan</h3>
+          <div class="stats-container" id="statsGrid"></div>
+        </div>
+
+        <!-- BẢNG DỮ LIỆU -->
+        <div id="dataSection" style="display: none;">
+          <h3 style="margin-bottom: 15px; color: #333;">📋 Bảng điểm chi tiết</h3>
+          
+          <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <strong>📊 Tổng số:</strong> <span id="totalRecords" style="color: #667eea; font-weight: 600;">0</span> bản ghi | 
+            <strong>👁️ Đang hiển thị:</strong> <span id="displayRecords" style="color: #28a745; font-weight: 600;">0</span> bản ghi
+          </div>
+
+          <div class="data-table-container">
+            <div style="max-height: 600px; overflow-y: auto;">
+              <table class="data-table" id="gradesTable">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">STT</th>
+                    <th>MSSV</th>
+                    <th>Tên sinh viên</th>
+                    <th>Địa chỉ ví</th>
+                    <th>Lớp</th>
+                    <th>Học kỳ</th>
+                    <th>Mã MH</th>
+                    <th>Tên môn học</th>
+                    <th style="text-align: center;">TC</th>
+                    <th style="text-align: center;">Điểm</th>
+                    <th style="text-align: center;">Chữ</th>
+                    <th>Giảng viên</th>
+                    <th>Ngày upload</th>
+                    <th>Người upload</th>
+                  </tr>
+                </thead>
+                <tbody id="gradesBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOADING -->
+        <div id="loadingSection" style="display: none;">
+          <div class="empty-state">
+            <div class="icon">⏳</div>
+            <h3>Đang tải dữ liệu từ blockchain...</h3>
+            <p>Vui lòng đợi trong giây lát</p>
+          </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="emptySection" style="display: block;">
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <h3>Chưa có dữ liệu</h3>
+            <p>Vui lòng chọn lớp từ bộ lọc phía trên để xem điểm</p>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End viewTab -->
+
+    <!-- TAB: DANH SÁCH XÉT TỐT NGHIỆP -->
+    <div id="applicationsTab" style="display: none;">
+      <div class="view-container">
+        <!-- BỘ LỌC -->
+        <div class="filter-card">
+          <h3 style="margin-bottom: 20px; color: #333;">🔍 Bộ lọc đơn xét tốt nghiệp</h3>
+          
+          <div class="filter-row">
+            <div class="filter-group">
+              <label>📚 Lọc theo</label>
+              <select id="appFilterType" onchange="updateAppFilter()">
+                <option value="all">Tất cả</option>
+                <option value="pending">Đang chờ duyệt</option>
+                <option value="approved">Đã duyệt</option>
+                <option value="rejected">Đã từ chối</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>📅 Năm nộp đơn</label>
+              <select id="appYearFilter" onchange="filterApplicationData()">
+                <option value="">Tất cả năm</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>🔎 MSSV / Tên sinh viên</label>
+              <input type="text" id="appStudentFilter" placeholder="Nhập MSSV hoặc tên..." onkeyup="filterApplicationData()" />
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button onclick="loadApplicationsData()" style="background: #17a2b8;">🔄 Tải lại dữ liệu</button>
+            <button onclick="resetAppFilters()" style="background: #6c757d;">🔄 Đặt lại bộ lọc</button>
+            <button class="success" onclick="exportApplicationsToExcel()">📥 Xuất Excel</button>
+          </div>
+        </div>
+
+        <!-- THỐNG KÊ -->
+        <div id="appStatsSection" style="display: none;">
+          <h3 style="margin-bottom: 15px; color: #333;">📊 Thống kê đơn xét tốt nghiệp</h3>
+          <div class="stats-container">
+            <div class="stat-box">
+              <div class="icon">📋</div>
+              <div class="value" id="totalApplications">0</div>
+              <div class="label">Tổng đơn</div>
+            </div>
+            <div class="stat-box" style="background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white;">
+              <div class="icon">⏳</div>
+              <div class="value" id="pendingApplications">0</div>
+              <div class="label">Đang chờ duyệt</div>
+            </div>
+            <div class="stat-box" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white;">
+              <div class="icon">✅</div>
+              <div class="value" id="approvedApplications">0</div>
+              <div class="label">Đã duyệt</div>
+            </div>
+            <div class="stat-box" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white;">
+              <div class="icon">❌</div>
+              <div class="value" id="rejectedApplications">0</div>
+              <div class="label">Đã từ chối</div>
+            </div>
+            <div class="stat-box">
+              <div class="icon">📊</div>
+              <div class="value" id="appAvgGPA">0.00</div>
+              <div class="label">GPA trung bình</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BẢNG DỮ LIỆU -->
+        <div id="appDataSection" style="display: none;">
+          <h3 style="margin-bottom: 15px; color: #333;">📋 Danh sách đơn xét tốt nghiệp</h3>
+          
+          <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <strong>📊 Tổng số:</strong> <span id="totalAppRecords" style="color: #667eea; font-weight: 600;">0</span> đơn | 
+            <strong>👁️ Đang hiển thị:</strong> <span id="displayAppRecords" style="color: #28a745; font-weight: 600;">0</span> đơn
+          </div>
+
+          <div class="data-table-container">
+            <div style="max-height: 600px; overflow-y: auto;">
+              <table class="data-table" id="applicationsTable">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">STT</th>
+                    <th>MSSV</th>
+                    <th>Tên sinh viên</th>
+                    <th>Lớp</th>
+                    <th style="text-align: center;">GPA (4.0)</th>
+                    <th style="text-align: center;">GPA (10)</th>
+                    <th style="text-align: center;">Tín chỉ</th>
+                    <th>Xếp loại</th>
+                    <th>Ngày nộp</th>
+                    <th style="text-align: center;">Trạng thái</th>
+                    <th style="text-align: center;">Chi tiết</th>
+                    <th style="text-align: center;">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="applicationsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOADING -->
+        <div id="appLoadingSection" style="display: none;">
+          <div class="empty-state">
+            <div class="icon">⏳</div>
+            <h3>Đang tải dữ liệu từ blockchain...</h3>
+            <p>Vui lòng đợi trong giây lát</p>
+          </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="appEmptySection" style="display: block;">
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <h3>Chưa có đơn xét tốt nghiệp</h3>
+            <p>Danh sách đơn sẽ hiển thị khi sinh viên đăng ký xét tốt nghiệp</p>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End applicationsTab -->
+
+    <!-- TAB: SINH VIÊN TỐT NGHIỆP -->
+    <div id="graduateTab" style="display: none;">
+      <div class="view-container">
+        <!-- BỘ LỌC -->
+        <div class="filter-card">
+          <h3 style="margin-bottom: 20px; color: #333;">🔍 Bộ lọc sinh viên tốt nghiệp</h3>
+          
+          <div class="filter-row">
+            <div class="filter-group">
+              <label>📚 Lọc theo</label>
+              <select id="graduateFilterType" onchange="updateGraduateFilter()">
+                <option value="class">Lớp học</option>
+                <option value="year">Năm tốt nghiệp</option>
+              </select>
+            </div>
+
+            <div class="filter-group" id="graduateClassGroup">
+              <label>📚 Lớp học</label>
+              <select id="graduateClassFilter" onchange="loadGraduateData()">
+                <option value="">-- Chọn lớp --</option>
+              </select>
+            </div>
+
+            <div class="filter-group" id="graduateYearGroup" style="display: none;">
+              <label>📅 Năm tốt nghiệp</label>
+              <select id="graduateYearFilter" onchange="loadGraduateData()">
+                <option value="">-- Chọn năm --</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>🔎 MSSV / Tên sinh viên</label>
+              <input type="text" id="graduateStudentFilter" placeholder="Nhập MSSV hoặc tên..." onkeyup="filterGraduateData()" />
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button onclick="resetGraduateFilters()" style="background: #6c757d;">🔄 Đặt lại bộ lọc</button>
+            <button class="success" onclick="exportGraduatesToExcel()">📥 Xuất Excel</button>
+            <button onclick="loadGraduateData()" style="background: #17a2b8;">🔄 Tải lại dữ liệu</button>
+          </div>
+        </div>
+
+        <!-- THỐNG KÊ TỐT NGHIỆP -->
+        <div id="graduateStatsSection" style="display: none;">
+          <h3 style="margin-bottom: 15px; color: #333;">📊 Thống kê tốt nghiệp</h3>
+          <div class="stats-container">
+            <div class="stat-box">
+              <div class="icon">🎓</div>
+              <div class="value" id="totalGraduates">0</div>
+              <div class="label">Tổng số tốt nghiệp</div>
+            </div>
+            <div class="stat-box">
+              <div class="icon">🏆</div>
+              <div class="value" id="excellentCount">0</div>
+              <div class="label">Xuất sắc</div>
+            </div>
+            <div class="stat-box">
+              <div class="icon">🥇</div>
+              <div class="value" id="goodCount">0</div>
+              <div class="label">Giỏi</div>
+            </div>
+            <div class="stat-box">
+              <div class="icon">🥈</div>
+              <div class="value" id="fairCount">0</div>
+              <div class="label">Khá</div>
+            </div>
+            <div class="stat-box">
+              <div class="icon">📊</div>
+              <div class="value" id="avgGPA">0.00</div>
+              <div class="label">GPA trung bình</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BẢNG SINH VIÊN TỐT NGHIỆP -->
+        <div id="graduateDataSection" style="display: none;">
+          <h3 style="margin-bottom: 15px; color: #333;">🎓 Danh sách sinh viên tốt nghiệp</h3>
+          
+          <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <strong>📊 Tổng số:</strong> <span id="totalGraduateRecords" style="color: #667eea; font-weight: 600;">0</span> sinh viên | 
+            <strong>👁️ Đang hiển thị:</strong> <span id="displayGraduateRecords" style="color: #28a745; font-weight: 600;">0</span> sinh viên
+          </div>
+
+          <div class="data-table-container">
+            <div style="max-height: 600px; overflow-y: auto;">
+              <table class="data-table" id="graduateTable">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">STT</th>
+                    <th>MSSV</th>
+                    <th>Tên sinh viên</th>
+                    <th>Lớp</th>
+                    <th>Ngành</th>
+                    <th style="text-align: center;">GPA (4.0)</th>
+                    <th style="text-align: center;">GPA (10)</th>
+                    <th style="text-align: center;">Tín chỉ</th>
+                    <th>Xếp loại</th>
+                    <th>Năm TN</th>
+                    <th style="text-align: center;">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="graduateBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOADING -->
+        <div id="graduateLoadingSection" style="display: none;">
+          <div class="empty-state">
+            <div class="icon">⏳</div>
+            <h3>Đang tải dữ liệu từ blockchain...</h3>
+            <p>Vui lòng đợi trong giây lát</p>
+          </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="graduateEmptySection" style="display: block;">
+          <div class="empty-state">
+            <div class="icon">🎓</div>
+            <h3>Chưa có dữ liệu sinh viên tốt nghiệp</h3>
+            <p>Vui lòng chọn lớp hoặc năm tốt nghiệp từ bộ lọc phía trên</p>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End graduateTab -->
+
+    <!-- MODAL XEM CHI TIẾT SINH VIÊN -->
+    <div id="studentDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; overflow-y: auto;">
+      <div style="max-width: 1000px; margin: 50px auto; background: white; border-radius: 10px; padding: 30px; position: relative;">
+        <button onclick="closeStudentDetail()" style="position: absolute; top: 15px; right: 15px; background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold;">✕</button>
+        
+        <h2 style="color: #667eea; margin-bottom: 20px;">📋 Thông tin chi tiết sinh viên</h2>
+        
+        <div id="studentDetailContent"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Thư viện SheetJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.4/dist/web3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    // Đợi tất cả thư viện load xong mới load dean_students.js
+    window.addEventListener('load', function() {
+      if (typeof XLSX === 'undefined') {
+        console.error('❌ XLSX library not loaded!');
+        alert('❌ Lỗi: Thư viện XLSX chưa được load. Vui lòng tải lại trang.');
+      } else {
+        console.log('✅ XLSX library loaded successfully');
+      }
+      if (typeof CryptoJS === 'undefined') {
+        console.error('❌ CryptoJS library not loaded!');
+        alert('❌ Lỗi: Thư viện CryptoJS chưa được load. Vui lòng tải lại trang.');
+      } else {
+        console.log('✅ CryptoJS library loaded successfully');
+      }
+    });
+  </script>
+  <script src="dean_students.js"></script>
+</body>
+</html>

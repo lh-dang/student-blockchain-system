@@ -1,0 +1,46 @@
+ganache --chain.chainId 1337 --chain.networkId 1337 --server.port 8545 --chain.allowUnlimitedContractSize --miner.blockGasLimit 900000000 --wallet.totalAccounts 20 --mnemonic "broom trick volume shift unaware february wall involve divert render utility accuse"
+
+// npx truffle compile 
+truffle migrate --reset --network development
+
+
+cập nhật api cho fontend
+//node update_all_frontend.js
+node update_frontend_contract.js
+
+cd /home/dang/student-blockchain-system/frontend && python3 -m http.server 8082
+
+//phân quyền
+//truffle exec setup_roles.js --network development
+
+---
+http://127.0.0.1:8082/admin_programs.html
+
+---
+
+ipfs config Addresses.Gateway /ip4/127.0.0.1/tcp/8090
+ipfs daemon
+--- xem dữ liệu block ---
+--- xem block thứ 10 ---
+curl -X POST http://127.0.0.1:8545 \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0xa","true"],"id":1}'
+(Lưu ý: số block phải dùng hex → 10 = 0xa)
+--- lấy block mới nhất ---
+curl -X POST http://127.0.0.1:8545 \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest", true],"id":1}'
+--- lấy bằng ganache-cli --- 
+truffle console
+--- xem block số 5--- 
+await web3.eth.getBlock(5, true)
+dữ liệu đã bị encode, có API sẽ giải mã được
+
+---
+
+ngay trang quản lý nhập điểm, bản 📋 Danh sách file sẽ tạo, ngay cột chi tiết, sửa lỗi ngay cột chi tiết này, tôi không xem được chi tiết của sinh viên
+
+---
+trang admin_students.html, tab danh sách sinh viên, tôi muốn nó hiển thị như bản excel ở tab upload file excel
+
+ganache --chain.chainId 1337 --chain.networkId 1337 --server.port 8545 --wallet.totalAccounts 20 --miner.blockGasLimit 100000000 --mnemonic "broom trick volume shift unaware february wall involve divert render utility accuse" > /tmp/ganache.log 2>&1 &

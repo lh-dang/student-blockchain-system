@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blockchain Student Management System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 50px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 18px;
+      margin-bottom: 50px;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .card-desc {
+      font-size: 14px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    .admin-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    .dean-card {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    .student-card {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    .verify-card {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    .info-section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 10px;
+      margin-top: 40px;
+      text-align: left;
+    }
+    .info-section h3 {
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+    .info-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .info-section li {
+      padding: 8px 0;
+      color: #333;
+      line-height: 1.8;
+    }
+    .info-section li::before {
+      content: "✓ ";
+      color: #28a745;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    .contract-info {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      border-radius: 5px;
+      font-size: 14px;
+      text-align: left;
+    }
+    .contract-info code {
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Blockchain Student Management</h1>
+    <p class="subtitle">Hệ thống quản lý sinh viên và xác thực bằng tốt nghiệp trên Blockchain</p>
+
+    <div class="cards-grid">
+      <!-- Admin Programs -->
+      <a href="admin_programs.html" class="card admin-card">
+        <div class="card-icon">📚</div>
+        <div class="card-title">Quản lý Chương trình</div>
+        <div class="card-desc">
+          Tạo và quản lý chương trình đào tạo, môn học bắt buộc và tự chọn
+        </div>
+      </a>
+
+      <!-- Admin Students -->
+      <a href="admin_students.html" class="card admin-card">
+        <div class="card-icon">👥</div>
+        <div class="card-title">Quản lý Sinh viên</div>
+        <div class="card-desc">
+          Đăng ký sinh viên mới, cập nhật thông tin và phân bổ chương trình
+        </div>
+      </a>
+
+      <!-- Dean -->
+      <a href="dean_students.html" class="card dean-card">
+        <div class="card-icon">📝</div>
+        <div class="card-title">Nhập điểm (Trưởng khoa)</div>
+        <div class="card-desc">
+          Submit điểm học kỳ cho sinh viên lên blockchain
+        </div>
+      </a>
+
+      <!-- Student Portal -->
+      <a href="student.html" class="card student-card">
+        <div class="card-icon">🎓</div>
+        <div class="card-title">Tra cứu Điểm & Mint Bằng</div>
+        <div class="card-desc">
+          Xem điểm, xét tốt nghiệp và mint bằng tốt nghiệp blockchain
+        </div>
+      </a>
+
+      <!-- Verify Diploma -->
+      <a href="verify_diploma.html" class="card verify-card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Xác thực Bằng</div>
+        <div class="card-desc">
+          Dành cho doanh nghiệp xác thực bằng tốt nghiệp qua blockchain
+        </div>
+      </a>
+    </div>
+
+    <div class="info-section">
+      <h3>🚀 Tính năng chính</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <ul>
+          <li>Quản lý chương trình đào tạo</li>
+          <li>Đăng ký và cập nhật sinh viên</li>
+          <li>Submit điểm học kỳ</li>
+          <li>Tra cứu điểm trực tuyến</li>
+        </ul>
+        <ul>
+          <li>Xét tốt nghiệp tự động</li>
+          <li><strong>Mint bằng blockchain</strong></li>
+          <li><strong>Xác thực bằng tức thì</strong></li>
+          <li>Minh bạch và không thể giả mạo</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="contract-info">
+      <h4 style="color: #0d47a1; margin-bottom: 10px;">🔗 Thông tin Blockchain</h4>
+      <div style="line-height: 1.8;">
+        <div><strong>Network:</strong> Ganache Local (http://localhost:8545)</div>
+        <div><strong>Contract Address:</strong> <code>0x5706f2E0fB9a7d39C556644d67e0C6B30797FC5F</code></div>
+        <div><strong>Compiler:</strong> Solidity 0.8.20</div>
+        <div style="margin-top: 10px; color: #666; font-size: 13px;">
+          💡 Hệ thống sử dụng SHA256 hash để xác thực bằng tốt nghiệp. Mỗi bằng được ghi lại trên blockchain với hash duy nhất, đảm bảo không thể giả mạo hoặc chỉnh sửa.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e9ecef; color: #666; font-size: 14px;">
+      <p>📖 Xem hướng dẫn chi tiết: <a href="DIPLOMA_VERIFICATION_GUIDE.md" style="color: #667eea; text-decoration: none; font-weight: 600;">DIPLOMA_VERIFICATION_GUIDE.md</a></p>
+      <p style="margin-top: 10px;">© 2025 Blockchain Student Management System</p>
+    </div>
+  </div>
+</body>
+</html>

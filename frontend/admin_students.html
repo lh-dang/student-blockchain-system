@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Quản lý Tài Khoản</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 30px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #555;
+      margin: 30px 0 15px 0;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 10px 5px 10px 0;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+    button.success {
+      background: #28a745;
+    }
+    button.success:hover {
+      background: #218838;
+    }
+    button.danger {
+      background: #dc3545;
+    }
+    button.danger:hover {
+      background: #c82333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      margin: 10px 0;
+      font-family: inherit;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .success-box {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .error-box {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .tab-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ddd;
+    }
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 5px 5px 0 0;
+      font-weight: 600;
+      color: #666;
+    }
+    .tab.active {
+      background: #667eea;
+      color: white;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .student-list {
+      margin-top: 20px;
+    }
+    .student-item {
+      background: #f8f9fa;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border-left: 4px solid #667eea;
+    }
+    .student-item strong {
+      color: #333;
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+    .file-input-label {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .file-input-label:hover {
+      background: #5568d3;
+    }
+    .file-name {
+      display: inline-block;
+      margin-left: 10px;
+      color: #666;
+      font-size: 14px;
+    }
+    textarea {
+      min-height: 200px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>👥 Admin Dashboard</h1>
+    <p class="subtitle">Đăng ký sinh viên vào hệ thống blockchain</p>
+
+    <button id="btnConnect">🔗 Kết nối MetaMask (Admin)</button>
+    <div id="accountInfo" style="margin: 15px 0; font-size: 14px;">
+      <strong>Chưa kết nối</strong>
+    </div>
+
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+    <div class="tab-container">
+      <button class="tab active" onclick="switchTab('single')">📝 Đăng ký sinh viên mới</button>
+      <button class="tab" onclick="switchTab('update')">✏️ Cập nhật thông tin sinh viên</button>
+      <button class="tab" onclick="switchTab('excel')">📊 Upload file Excel</button>
+      <button class="tab" onclick="switchTab('dean')">👨‍🏫 Quản lý Cán bộ quản lý điểm</button>
+      <button class="tab" onclick="switchTab('list')">📋 Danh sách sinh viên</button>
+    </div>
+
+    <!-- TAB 1: Đăng ký từng sinh viên -->
+    <div id="tab-single" class="tab-content active">
+      <h2>Đăng ký sinh viên mới</h2>
+      
+      <div class="warning-box" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 15px; border-radius: 5px;">
+        <strong>⚠️ YÊU CẦU QUAN TRỌNG:</strong><br>
+        <strong style="color: #d63031;">Trước khi đăng ký sinh viên, PHẢI gán Class vào Chương trình đào tạo!</strong><br>
+        <ol style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+          <li>Vào trang <strong>admin_programs.html</strong></li>
+          <li>Upload chương trình đào tạo (JSON)</li>
+          <li>Gán Class vào chương trình (ví dụ: DI20T9A1 → TT&MMT2020)</li>
+          <li>Quay lại đây đăng ký sinh viên với Class đã được gán</li>
+        </ol>
+        <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 5px;">
+          <strong>💡 Cách hoạt động:</strong> Sinh viên tự động được gán vào chương trình dựa trên Class. 
+          Không cần nhập Program ID thủ công!
+        </div>
+      </div>
+      
+      <div class="info-box" style="font-size: 13px;">
+        <strong>📌 Lưu ý:</strong><br>
+        • MSSV là bắt buộc (làm key để nối các block)<br>
+        • <strong>Class là BẮT BUỘC</strong> (để tự động map sang Program)<br>
+        • Dữ liệu lưu trực tiếp trên blockchain
+      </div>
+
+      <h3 style="color: #667eea; margin-top: 20px;">Thông tin Cá nhân</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mã số sinh viên (MSSV) *</label>
+          <input type="text" id="singleStudentId" placeholder="B2203716" value="B2203716" />
+        </div>
+        <div class="form-group">
+          <label>Họ và tên *</label>
+          <input type="text" id="singleName" placeholder="Lê Hải Đăng" value="Lê Hải Đăng" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ngày sinh</label>
+          <input type="text" id="singleDob" placeholder="21/08/2004" value="21/08/2004" />
+        </div>
+        <div class="form-group">
+          <label>CCCD/CMND</label>
+          <input type="text" id="singleCccd" placeholder="093103002165" value="093103002165" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input type="tel" id="singlePhone" placeholder="0374396243" value="0374396243" />
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="singleEmail" placeholder="dangb2203716@student.ctu.edu.vn" value="dangb2203716@student.ctu.edu.vn" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Quê quán</label>
+        <input type="text" id="singleHometown" placeholder="Châu Thành, Kiên Giang" value="Châu Thành, Kiên Giang" />
+      </div>
+
+      <h3 style="color: #667eea; margin-top: 30px;">Thông tin Đào tạo</h3>
+      <div class="form-group">
+        <label>Lớp học * <span style="color: #d63031; font-size: 12px;">(Bắt buộc - Dùng để map sang Program)</span></label>
+        <input type="text" id="singleClass" placeholder="DI20T9A1" value="DI20T9A1" required />
+        <small style="color: #666; font-size: 12px;">Ví dụ: DI20T9A1, FL20V1F1. Phải đã gán vào Program trước!</small>
+      </div>
+
+      <div class="form-group">
+        <label>Tên ngành học</label>
+        <input type="text" id="singleMajor" placeholder="An toàn thông tin" value="An toàn thông tin" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Khoa</label>
+          <input type="text" id="singleDepartment" placeholder="Khoa Công nghệ Thông tin và Truyền thông" value="Khoa Công nghệ Thông tin và Truyền thông" />
+        </div>
+        <div class="form-group">
+          <label>Trường</label>
+          <input type="text" id="singleSchool" placeholder="Trường Đại học Cần Thơ" value="Trường Đại học Cần Thơ" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Hệ đào tạo</label>
+          <input type="text" id="singleProgram" placeholder="Chính quy" value="Chính quy" />
+        </div>
+        <div class="form-group">
+          <label>Khóa học</label>
+          <input type="text" id="singleKhoaHoc" placeholder="2020" value="" />
+          <small style="color: #666; font-size: 12px;">Ví dụ: 2020, 2021, 2022...</small>
+        </div>
+      </div>
+
+      <h3 style="color: #d63031; margin-top: 30px;">🔐 Bảo mật - Địa chỉ Ví</h3>
+      <div class="warning-box" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 15px;">
+        <strong>⚠️ QUAN TRỌNG:</strong> Địa chỉ ví Ethereum của sinh viên (BẮT BUỘC).<br>
+        <strong>Lý do:</strong> Chỉ người có private key của ví này mới có thể:<br>
+        • Đăng nhập xem điểm<br>
+        • Mint bằng tốt nghiệp<br>
+        • Xác thực danh tính<br><br>
+        <strong>💡 Cách tạo:</strong> Sử dụng script <code>generate_wallets.js</code> hoặc MetaMask
+      </div>
+      
+      <div class="form-group">
+        <label>Địa chỉ Ví Ethereum * <span style="color: #d63031;">(BẮT BUỘC - Để xác thực)</span></label>
+        <input type="text" id="singleWalletAddress" placeholder="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1" value="" required 
+               pattern="^0x[a-fA-F0-9]{40}$" 
+               title="Địa chỉ Ethereum hợp lệ (0x + 40 ký tự hex)" />
+        <small style="color: #666; font-size: 12px;">Ví dụ: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1</small>
+      </div>
+
+      <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea id="singleNotes" rows="3" placeholder="Thông tin bổ sung..."></textarea>
+      </div>
+
+      <button class="success" onclick="registerSingleStudent()">✅ Đăng ký sinh viên</button>
+      <button onclick="clearSingleForm()">🔄 Xóa form</button>
+
+      <div id="singleStatus"></div>
+    </div>
+
+    <!-- TAB 2: Cập nhật thông tin sinh viên -->
+    <div id="tab-update" class="tab-content">
+      <h2>Cập nhật thông tin sinh viên</h2>
+      
+      <div class="warning-box" style="font-size: 13px;">
+        <strong>⚠️ Lưu ý:</strong><br>
+        • Chức năng này chỉ cập nhật thông tin cá nhân/đào tạo của sinh viên<br>
+        • KHÔNG ảnh hưởng đến điểm số đã submit<br>
+        • Sinh viên phải đã được đăng ký trước đó
+      </div>
+
+      <div class="form-group">
+        <label>Mã số sinh viên (MSSV) để tìm kiếm *</label>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="updateSearchMSSV" placeholder="Nhập MSSV cần cập nhật" />
+          <button onclick="searchStudentForUpdate()" style="white-space: nowrap;">🔍 Tìm kiếm</button>
+        </div>
+      </div>
+
+      <div id="updateSearchResult"></div>
+
+      <div id="updateFormSection" style="display: none;">
+        <h3 style="color: #667eea; margin-top: 20px;">Thông tin Cá nhân</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Mã số sinh viên (MSSV) *</label>
+            <input type="text" id="updateStudentId" readonly style="background: #f0f0f0;" />
+          </div>
+          <div class="form-group">
+            <label>Họ và tên *</label>
+            <input type="text" id="updateName" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ngày sinh</label>
+            <input type="text" id="updateDob" placeholder="21/08/2004" />
+          </div>
+          <div class="form-group">
+            <label>CCCD/CMND</label>
+            <input type="text" id="updateCCCD" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" id="updatePhone" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="updateEmail" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Quê quán</label>
+          <input type="text" id="updateHometown" />
+        </div>
+
+        <h3 style="color: #667eea; margin-top: 30px;">Thông tin Đào tạo</h3>
+        <div class="form-group">
+          <label>Lớp</label>
+          <input type="text" id="updateClass" />
+        </div>
+
+        <div class="form-group">
+          <label>Tên ngành học</label>
+          <input type="text" id="updateMajor" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Khoa</label>
+            <input type="text" id="updateDepartment" />
+          </div>
+          <div class="form-group">
+            <label>Trường</label>
+            <input type="text" id="updateSchool" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Hệ đào tạo</label>
+            <input type="text" id="updateProgram" />
+          </div>
+          <div class="form-group">
+            <label>Khóa học</label>
+            <input type="text" id="updateKhoaHoc" placeholder="2020" />
+          </div>
+        </div>
+
+        <h3 style="color: #d63031; margin-top: 30px;">🔐 Bảo mật - Địa chỉ Ví</h3>
+        <div class="warning-box" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 15px;">
+          <strong>⚠️ QUAN TRỌNG:</strong> Thay đổi địa chỉ ví sinh viên.<br>
+          <strong>Lưu ý:</strong><br>
+          • Để trống nếu không muốn thay đổi địa chỉ ví<br>
+          • Địa chỉ ví mới phải chưa được liên kết với sinh viên khác<br>
+          • Sinh viên sẽ cần sử dụng private key của ví mới để đăng nhập
+        </div>
+        
+        <div class="form-group">
+          <label>Địa chỉ Ví Ethereum <span style="color: #666; font-size: 12px;">(Để trống nếu không đổi)</span></label>
+          <input type="text" id="updateWalletAddress" placeholder="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1" 
+                 pattern="^0x[a-fA-F0-9]{40}$" 
+                 title="Địa chỉ Ethereum hợp lệ (0x + 40 ký tự hex)" />
+          <small style="color: #666; font-size: 12px;">Ví dụ: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1</small>
+        </div>
+
+        <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px;">
+          <strong>📌 Xác nhận:</strong> Bạn đang cập nhật thông tin cho sinh viên <strong id="updateConfirmName">-</strong> (MSSV: <strong id="updateConfirmId">-</strong>)
+        </div>
+
+        <button class="success" onclick="updateStudentInfo()">✅ Cập nhật thông tin</button>
+        <button onclick="clearUpdateForm()">🔄 Xóa form</button>
+
+        <div id="updateStatus"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Upload Excel -->
+    <div id="tab-excel" class="tab-content">
+      <h2>Upload danh sách sinh viên từ Excel/CSV</h2>
+
+      <div class="success-box" style="background: #d4edda; border-left: 4px solid #28a745;">
+        <strong>🚀 TÍNH NĂNG BATCH REGISTRATION:</strong><br>
+        <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+          <li>✅ <strong>Gộp tất cả sinh viên vào MỘT transaction duy nhất</strong></li>
+          <li>✅ <strong>Chỉ cần ký một lần</strong> thay vì ký nhiều lần</li>
+          <li>✅ <strong>Tiết kiệm gas fee</strong> và thời gian đăng ký</li>
+          <li>✅ <strong>Tất cả sinh viên vào cùng một block</strong></li>
+        </ul>
+      </div>
+
+      <div class="info-box" style="font-size: 12px;">
+        <strong>📋 Cấu trúc file mẫu (Excel/CSV):</strong>
+        <table style="width: 100%; margin-top: 10px; font-size: 11px; border-collapse: collapse;">
+          <tr style="background: #667eea; color: white;">
+            <th style="padding: 8px; border: 1px solid #ddd;">MSSV</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">HoTen</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">NgaySinh</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">CCCD</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">SDT</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Email</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">QueQuan</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Lop</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Nganh</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Khoa</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Truong</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">HeDaoTao</th>
+            <th style="padding: 8px; border: 1px solid #ddd; background: #f6921e;">WalletAddress</th>
+            <th style="padding: 8px; border: 1px solid #ddd; background: #28a745;">KhoaHoc</th>
+          </tr>
+          <tr style="background: #f8f9fa;">
+            <td style="padding: 8px; border: 1px solid #ddd;">B2203716</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">Lê Hải Đăng</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">21/08/2004</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">093103002165</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">0374396243</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">dangb2203716@student.ctu.edu.vn</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">Kiên Giang</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">DI22D2A1</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">An toàn thông tin</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">CNTT&TT</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">Đại học Cần Thơ</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">Chính quy</td>
+            <td style="padding: 8px; border: 1px solid #ddd; font-family: monospace; font-size: 10px;">0x742d35Cc...f44e</td>
+            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">2020</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="file-input-wrapper">
+        <input type="file" id="excelFileStudents" accept=".xlsx,.xls,.csv" onchange="handleExcelStudentUpload(event)" />
+        <label for="excelFileStudents" class="file-input-label">📁 Chọn file Excel/CSV</label>
+        <span class="file-name" id="excelStudentsFileName">Chưa chọn file</span>
+      </div>
+
+      <div id="excelUploadStatus"></div>
+      <div id="excelPreviewSection" style="display: none; margin-top: 20px;">
+        <h3 style="color: #667eea;">Xem trước dữ liệu</h3>
+        <div id="excelPreviewStats"></div>
+        <div style="max-height: 400px; overflow-y: auto; margin: 20px 0;">
+          <table id="excelPreviewTable" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead id="excelPreviewHeader"></thead>
+            <tbody id="excelPreviewBody"></tbody>
+          </table>
+        </div>
+        <button class="success" onclick="submitExcelStudents()">✅ Đăng ký tất cả sinh viên</button>
+        <button onclick="clearExcelUpload()">🔄 Xóa và chọn file khác</button>
+      </div>
+      <div id="excelSubmitResult"></div>
+    </div>
+
+    <!-- TAB 4: Quản lý Cán bộ quản lý điểm -->
+    <div id="tab-dean" class="tab-content">
+      <h2>Quản lý Cán bộ quản lý điểm</h2>
+      
+      <div class="info-box" style="font-size: 13px;">
+        <strong>📌 Lưu ý:</strong><br>
+        • Cán bộ quản lý điểm có quyền submit điểm cho sinh viên và thu hồi bằng tốt nghiệp<br>
+        • Chỉ Admin mới có quyền thêm/xóa cán bộ quản lý điểm<br>
+        • Mỗi cán bộ cần có địa chỉ ví MetaMask riêng
+      </div>
+
+      <h3 style="color: #667eea; margin-top: 20px;">Thêm Cán bộ quản lý điểm mới</h3>
+      <div class="form-group">
+        <label>Địa chỉ ví MetaMask *</label>
+        <input type="text" id="deanAddress" placeholder="0x..." />
+        <small style="color: #666; display: block; margin-top: 5px;">
+          Ví dụ: 0x1234567890123456789012345678901234567890
+        </small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Họ và tên *</label>
+          <input type="text" id="deanName" placeholder="TS. Nguyễn Văn A" />
+        </div>
+        <div class="form-group">
+          <label>Tên Khoa *</label>
+          <input type="text" id="deanDepartment" placeholder="Công nghệ thông tin và truyền thông" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="deanEmail" placeholder="dean@ctu.edu.vn" />
+      </div>
+
+      <div class="form-group">
+        <label>Số điện thoại</label>
+        <input type="tel" id="deanPhone" placeholder="0123456789" />
+      </div>
+
+      <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea id="deanNotes" rows="2" placeholder="Thông tin bổ sung..."></textarea>
+      </div>
+
+      <button class="success" onclick="addDean()">✅ Thêm Cán bộ quản lý điểm</button>
+      <button onclick="clearDeanForm()">🔄 Xóa form</button>
+
+      <div id="deanAddStatus"></div>
+
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+
+      <h3 style="color: #667eea;">Danh sách Cán bộ quản lý điểm</h3>
+      <button onclick="loadDeanList()">🔄 Tải lại danh sách</button>
+      
+      <div id="deanList" class="student-list"></div>
+    </div>
+
+    <!-- TAB 6: Danh sách sinh viên -->
+    <div id="tab-list" class="tab-content">
+      <h2>Danh sách sinh viên đã đăng ký</h2>
+      
+      <div class="info-box">
+        <strong>ℹ️ Lưu ý:</strong> Chức năng này hiển thị các sinh viên bạn đã đăng ký trong phiên làm việc hiện tại. 
+        Để xem tất cả sinh viên trong blockchain, cần query events hoặc lưu danh sách riêng.
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <button onclick="loadRegisteredStudents()">🔄 Tải lại danh sách</button>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;">
+            📅 Khóa học:
+          </label>
+          <select id="yearFilter" onchange="filterStudents()" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 14px;">
+            <option value="">-- Tất cả khóa học --</option>
+          </select>
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;">
+            🎓 Lớp học:
+          </label>
+          <select id="classFilter" onchange="filterStudents()" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 14px;">
+            <option value="">-- Tất cả lớp --</option>
+          </select>
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;">
+            🔍 Tìm kiếm:
+          </label>
+          <input type="text" id="searchFilter" placeholder="MSSV hoặc tên..." onkeyup="filterStudents()" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 14px;" />
+        </div>
+      </div>
+      
+      <div id="studentList" class="student-list"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.4/dist/web3.min.js"></script>
+  <script src="admin_students.js"></script>
+
+</body>
+</html>

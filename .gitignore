@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Wallet files - CRITICAL SECURITY
+wallets_full.json
+wallets_addresses.json
+wallets_private_keys.json
+wallets.csv
+**/wallets_*.json
+**/wallets*.csv
+
+# Student data with wallet addresses
+**/thongtinsinhvien_with_wallet.json
+
+# Ganache data
+ganache-data/
+frontend/ganache-data/
+
+# Build artifacts
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp

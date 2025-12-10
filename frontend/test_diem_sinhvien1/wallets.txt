@@ -1,0 +1,106 @@
+chuyển đổi điểm hệ 10 sang hệ 4 và chữ: trưởng khoa sẽ nhập điểm hệ 10, chuyển sang hệ 4 và chữ cho sinh viên Quan sát:
+9,0-10,0 là A và tương ứng 4,0
+8,0-8,9 là B+ và tương ứng 3,5
+7,0-7,9 là B và tương ứng 3.0
+6,5-6,9 là C+ tương ứng với 2,5
+5,5-6,4 là C và tương ứng với 2,0
+5,0-5,4 là D+ và tương ứng với 1,5
+4,0-4,9 là D và tương ứng với 1,0
+nhỏ hơn 4,0 là F và tương ứng với 0,0
+điều kiện để ra trường là hoàng thành hết 156 tín chỉ (120 tín chỉ bắt buộc và 36 tín chỉ tự chọn), môn học nào cũng phải trên 1,0, điểm trung bình tích lũy trên 2,0, tối đa 9 học kỳ, file điểm của trưởng khoa không được chỉnh sửa, xếp loại sinh viên như sau:
+xuất sắc: 3,6-4.0
+giỏi: 3,2 - 3,59
+khá: 2,5-3,19
+trung bình: 2,0-2,49
+trung bình yếu: 1.0 -1,99
+kém: <1.0
+
+ở trang sinh viên, hiển thị nút đăng ký xét tốt nghiệp, khi sinh viên bấm đăng ký sét tốt nghiệp thì so những môn sinh viên đã hoàng thành với chương trình đào tạo mà admin gắn cho sinh viên, hiển thị ra file những môn sinh viên đã hoàng thành và những môn chưa hoàng thành
+
+---
+thứ nhất F_MANH không phải là chương trình đào tạo của sinh viên, không liên quan gì đến sinh viên,
+
+---
+B2004710
+B2004711
+B2004715
+B2004718
+B2013471
+
+A - Đại Học - Chính Quy
+
+---
+Available Accounts
+==================
+(0) 0xaE8C94c9Cf089375Af9e651F5af7fBfcD032303d (1000 ETH)
+(1) 0xde0dA6007226B18a219cBECBA85AaF01223B60fe (1000 ETH)
+(2) 0xc27D92B6A6F4CF40e2d3481Fc704845457cA780f (1000 ETH)
+(3) 0x5935d2D529F222c6a5c294b8200D981E6AE9Bf80 (1000 ETH)
+(4) 0x8F862E1Ad21Ef9589676b7df6aE9df065C53aae5 (1000 ETH)
+(5) 0x4526248984373d72833574297641a69Bf46b8d55 (1000 ETH)
+(6) 0x736c8aA239423bAc6d83Dd4eDCF4a6bc4Da777cc (1000 ETH)
+(7) 0x07A0560af69B79991A715adE3a8EB4ae8F874B85 (1000 ETH)
+(8) 0xD1a3449f40A34411cd88ef2Eead13E66bb9809fA (1000 ETH)
+(9) 0xd3804FbF5b493E2138c890DF10a580Dc96f029cB (1000 ETH)
+(10) 0x819bf9c7059Dff587CBf118ebf7ae2977B3b424f (1000 ETH)
+(11) 0xe6C1bC86a8415a5A3be145908132143d48A68e38 (1000 ETH)
+(12) 0x0435b1716e84c0a3A6f889bccE5A00Fd15e49212 (1000 ETH)
+(13) 0x52Cc688bC930F93d6A52B6E394434f1c760E38d9 (1000 ETH)
+(14) 0x96fC6B7e41bBD2cecC7B863306CAA8d72b1f098C (1000 ETH)
+(15) 0xE80a162691B11A74bE409cFe7574DA5AcD441EC4 (1000 ETH)
+(16) 0x9b66B3ccd9dB4Ae00b6eB8fF9a21C283d5654Fb4 (1000 ETH)
+(17) 0xC301f3F561486D41576fFA9D0C118Ac5c5829A67 (1000 ETH)
+(18) 0x0cFCE9d981b7F62623C90bD72f9F424b764A77B1 (1000 ETH)
+(19) 0x368DC2f0c317eA8bC5ecD8dc10b950b695b7E7C5 (1000 ETH)
+
+Private Keys
+==================
+(0) 0x30960cdf5497dae37d6cdf33ab58129c792a552690d5e9791fe447211414c841
+(1) 0x85b7ad8aa2924b7d1506ffe8ed14b220f26b59055d09bc0e977be6fba3862792
+(2) 0x5762053a475e3820129638b38ad18857da8f9a465abf255e865d03d2d2daf39f
+(3) 0x4b1cf1db22ca7cef81f3e963ad2ee86e28821b5ae95074ce53b4f5888c1f1e02
+(4) 0x906bfeac739a44f8459bdd7fda3d6755f7a9d6c647e1da01b5fbf0e66506517a
+(5) 0xf703b71f9836d77d5c12a51ba65e992343d5001700a924abc9f3994b020fece6
+(6) 0x9b648c266a9a7512a1f157e025f3a705112208bcdb81554a6ff80d123a857a52
+(7) 0x9fbe8f5092eac174983026a92f0fcea912c6216437ae3bffe54846f8d9ba836d
+(8) 0xd6c116a4e5421579af809488df825a25bc2025cdbd38e6a375f6968503e96879
+(9) 0x1dda36642dfbaed48d461c594c92a4d5e7dd978968ccd8f090ce8e754dd35d11
+(10) 0x467bb5bb07bef8acde27d48d26eaba7bf45bf848be1ed6fde6121c5e58182693
+(11) 0x1a6abeb124dd2c9e9b8d11dbd8ee0052b2edf0d87466883d5e862e7006dbe3b3
+(12) 0x59ca2736c313a7920869d9ab99b8fc8cc5f7c4ad11cc899ab4a0155dfb6433b3
+(13) 0x8735aca0c6cf41f562a03c18d7193913decbc3eaf5c1bdfe23f6bacbde596fb0
+(14) 0x759c0c156265304df7b55c410c4a3d7db5b91d8ae50f48f4b57dec66759cd484
+(15) 0xcb6fa5554895dce639261d81d3ede6fec1843d44ee528b2585b8c97cd48e350c
+(16) 0xc1d58474e1097322802de0a011654bc33e0d6f94bbaa0b601359a7c2c95c8177
+(17) 0xb5028d164c59f4692e53a329c924eaf8d5ab4a1b5a45684589f86d04b3d2052a
+(18) 0x2e91fabdd15b7e002b7a4629008b27902b799d1ed97bc8c966d313faf534f22b
+(19) 0xa55ee0ce090eaa042c3797b052f514dc9e40f3e725e5f73a719351051ffd1ab1
+
+---
+ở trang admin_students.html ngay mục upload file excel, cấu trúc mẫu (excel/csv) thiếu HeDaoTao trước cột WalletAddress, bỏ phần   Lưu ý:
+• Dòng đầu tiên phải là header (tên cột)
+• Cột WalletAddress (cột 12) BẮT BUỘC - Địa chỉ ví Ethereum (0x...)
+• Tạo ví bằng: node generate_wallets.js <số_lượng>
+• Copy địa chỉ từ file wallets_addresses.json ,
+mục danh sách sinh viên, tôi muốn lọc theo năm học, học kỳ, lớp
+
+
+---
+trang admin_students.html bỏ tab upload file json, upload file excel ngay Cấu trúc file mẫu (Excel/CSV) thiếu cột HeDaoTao trước cột wallet address, tôi muốn thêm cột, mục upload file excel, ngay sau HeDaoTao và WalletAddress, tôi muốn thêm KhoaHoc ví dụ 2020, bỏ phần mã ngành, danh sách sinh viên thêm lọc theo KhoaHoc, lớp học phần, ngay mục upload file excel bỏ phần  Lưu ý:
+• Dòng đầu tiên phải là header (tên cột)
+• Cột WalletAddress (cột 12) BẮT BUỘC - Địa chỉ ví Ethereum (0x...)
+• Tạo ví bằng: node generate_wallets.js <số_lượng>
+• Copy địa chỉ từ file wallets_addresses.json 
+
+---
+trang admin_students.html, chỉnh phần cấu trúc file mẫu lại, chỉnh phần đăng ký sinh viên mới với cập nhật thông tin sinh viên cho phù hợp với file excel ở tab upload file excel
+
+---
+nếu một trang có chức năng đăng ký từng sinh viên, đăng ký nhiều sinh viên, cập nhật thông tin sinh viên, xem danh sách sinh viên, quản lý trưởng khoa(thêm tài khoản, xóa tài khoảng trưởng khoa) thì đặt tên là gì
+
+---
+trang admin_students.html, tab upload file excel, tôi muốn gôm tất cả các transaction thông tin sinh viên của các bạn sinh viên vào một block, ký một lần thay vì mỗi bạn một block, như vậy phải ký nhiều lần, thay đổi này có làm thay đổi quy trình gì không, bạn có thể sửa contract
+
+---
+tương tự, trang dean_students.html, tab nhập điểm, tôi muốn gôm tất cả transaction điểm của sinh viên vào một block, ký một lần, thay vì ký như trước
+

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Portal - Xem điểm Blockchain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/@metamask/eth-sig-util@7.0.0/dist/index.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 30px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .header-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border-left: 4px solid #667eea;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 10px 5px 10px 0;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+    button.success {
+      background: #28a745;
+    }
+    button.success:hover {
+      background: #218838;
+    }
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #0d47a1;
+    }
+    .success-box {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #155724;
+    }
+    .error-box {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #721c24;
+    }
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #856404;
+    }
+    .summary-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 30px 0;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .summary-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .summary-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .summary-label {
+      font-size: 14px;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .progress-bar {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #28a745, #20c997);
+      height: 100%;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .grade-distribution {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .grade-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .semester-card {
+      background: white;
+      border: 2px solid #667eea;
+      border-radius: 10px;
+      padding: 25px;
+      margin: 20px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .semester-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e9ecef;
+    }
+    .semester-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #667eea;
+    }
+    .semester-meta {
+      font-size: 13px;
+      color: #666;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .graduate-section {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Student Portal - Xem điểm Blockchain</h1>
+    <p class="subtitle">Tra cứu điểm học tập và quá trình học tập từ Blockchain</p>
+
+    <!-- WALLET CONNECTION -->
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+      <strong>🔐 XÁC THỰC BẮT BUỘC:</strong> Bạn phải kết nối ví MetaMask để xem điểm.<br>
+      Chỉ chủ sở hữu ví đã đăng ký mới có thể xem điểm của MSSV đó.
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <button id="connectWalletBtn" onclick="connectMetaMask()" style="background: linear-gradient(135deg, #f6921e 0%, #f47920 100%); font-size: 16px; padding: 15px 30px;">
+        🦊 Kết nối MetaMask
+      </button>
+      <div id="walletInfo" style="display: none; margin-top: 15px; padding: 15px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 5px;"></div>
+    </div>
+
+    <!-- HEADER SECTION - NHẬP MSSV -->
+    <div class="header-section" id="loginSection" style="display: none;">
+      <h3 style="color: #667eea; margin-bottom: 15px;">🔍 Tra cứu điểm</h3>
+      
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 250px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 5px; color: #333;">
+            Mã số sinh viên (MSSV):
+          </label>
+          <input 
+            type="text" 
+            id="inputMSSV" 
+            placeholder="Nhập MSSV (VD: B2203716)" 
+            style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 5px; font-size: 14px;"
+            value="B2203716"
+          />
+        </div>
+        <button id="btnSearch" class="success" style="margin-top: 22px;">
+          🔍 Tra cứu
+        </button>
+      </div>
+      
+      <div id="accountInfo" style="margin-top: 15px; font-size: 14px; color: #666;">
+        <em>💡 Nhập MSSV của bạn để xem kết quả học tập</em>
+      </div>
+      <div id="status"></div>
+    </div>
+
+    <!-- THÔNG TIN SINH VIÊN -->
+    <div id="studentInfoSection" style="display: none;" class="info-box">
+      <h3 style="color: #0d47a1; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+        👤 Thông tin sinh viên
+      </h3>
+      <div id="studentInfoContent">
+        <p style="color: #666; font-style: italic;">Thông tin sẽ hiển thị sau khi tra cứu</p>
+      </div>
+    </div>
+
+    <!-- TỔNG KẾT HỌC TẬP -->
+    <div class="summary-section" id="summarySection" style="display: none;">
+      <h2 style="margin-bottom: 10px;">📊 Tổng kết học tập</h2>
+      <p style="opacity: 0.9; margin-bottom: 20px;">Thông tin tổng hợp toàn khóa học</p>
+      
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">GPA Tích lũy</div>
+          <div class="summary-value" id="overallGPA">0.00</div>
+          <div style="font-size: 12px; margin-top: 5px;">Hệ 10 / Hệ 4</div>
+        </div>
+        
+        <div class="summary-card">
+          <div class="summary-label">Tín chỉ tích lũy</div>
+          <div class="summary-value" id="totalCredits">0</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="creditProgress" style="width: 0%;">0%</div>
+          </div>
+          <div style="font-size: 12px; margin-top: 5px;">Yêu cầu: 156 tín chỉ</div>
+        </div>
+        
+        <div class="summary-card">
+          <div class="summary-label">Tổng số môn</div>
+          <div class="summary-value" id="totalCourses">0</div>
+          <div style="font-size: 12px; margin-top: 5px;">
+            <span id="passedCourses" style="color: #20c997;">0 PASS</span> / 
+            <span id="failedCourses" style="color: #ff6b6b;">0 FAIL</span>
+          </div>
+        </div>
+        
+        <div class="summary-card">
+          <div class="summary-label">Số học kỳ</div>
+          <div class="summary-value" id="totalSemesters">0</div>
+          <div style="font-size: 12px; margin-top: 5px;">Đã hoàn thành</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px;">
+        <h3 style="font-size: 16px; margin-bottom: 10px;">📈 Phân bố điểm</h3>
+        <div class="grade-distribution">
+          <div class="grade-badge">
+            <strong id="gradeA">0</strong> môn A (9.0-10)
+          </div>
+          <div class="grade-badge">
+            <strong id="gradeB">0</strong> môn B+/B (7.0-8.9)
+          </div>
+          <div class="grade-badge">
+            <strong id="gradeC">0</strong> môn C+/C (5.5-6.9)
+          </div>
+          <div class="grade-badge">
+            <strong id="gradeD">0</strong> môn D+/D (4.0-5.4)
+          </div>
+          <div class="grade-badge">
+            <strong id="gradeF">0</strong> môn F (<4.0)
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong>Xếp loại học lực:</strong> 
+            <span id="academicRank" style="font-size: 18px; margin-left: 10px;">-</span>
+          </div>
+          <div>
+            <strong>Trạng thái:</strong> 
+            <span id="studyStatus" style="font-size: 18px; margin-left: 10px;">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DANH SÁCH HỌC KỲ -->
+    <div>
+      <h2 style="color: #333; margin-bottom: 15px;">📚 Điểm các học kỳ đã hoàn thành</h2>
+      
+      <div style="background: #e7f3ff; border-left: 4px solid #2196F3; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+        <h4 style="color: #0d47a1; margin-bottom: 10px;">📌 Quy tắc tính điểm môn học lại:</h4>
+        <ul style="margin-left: 20px; color: #333; line-height: 1.8;">
+          <li><strong>Tín chỉ:</strong> Môn học lại chỉ tính <strong>1 lần tín chỉ</strong> (không nhân số lần học)</li>
+          <li><strong>Số môn:</strong> Môn học lại chỉ tính <strong>1 môn</strong> trong tổng kết</li>
+          <li><strong>Điểm số:</strong> Lấy <strong>điểm cao nhất</strong> trong các lần học để tính GPA</li>
+          <li><strong>Môn chưa hoàn thành:</strong> Tất cả môn có điểm < 1.0 (hệ 4) - bao gồm cả môn bắt buộc và tự chọn</li>
+          <li><strong>Môn đã học lại và đạt:</strong> Không tính vào môn chưa hoàn thành nữa</li>
+          <li><strong>Số học kỳ tối đa:</strong> 26 học kỳ (không phải 9)</li>
+          <li><strong>Hiển thị:</strong> 
+            <span style="display: inline-block; width: 15px; height: 10px; background: #d4edda; border: 1px solid #c3e6cb; margin: 0 5px;"></span> Xanh = Kết quả được công nhận | 
+            <span style="display: inline-block; width: 15px; height: 10px; background: #fff3cd; border: 1px solid #ffeaa7; margin: 0 5px;"></span> Vàng = Môn học lại không tính
+          </li>
+        </ul>
+      </div>
+      
+      <button id="btnLoadGrades" class="success">📊 Tải điểm tất cả học kỳ</button>
+      <button id="btnCheckGraduation" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🎓 Đăng ký xét tốt nghiệp</button>
+      
+      <div id="loadingIndicator" style="display: none;">
+        <div class="spinner"></div>
+        <p class="loading">Đang tải dữ liệu từ blockchain...</p>
+      </div>
+      
+      <div id="semestersContainer"></div>
+    </div>
+
+    <!-- KẾT QUẢ XÉT TỐT NGHIỆP -->
+    <div id="graduationResult" style="display: none; margin-top: 30px;">
+    </div>
+
+
+  </div>
+
+  <!-- Web3.js -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.4/dist/web3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="student.js?t=1763296049"></script>
+</body>
+</html>
